@@ -2,7 +2,6 @@
 ---
 
 ## 📄 README.md for **Voce**
-```markdown
 # Voce
 
 **Voce** is a multilingual audio-to-text translator that combines **speech recognition, translation, and dictionary services** into one platform. Powered by **OpenAI Whisper**, **Google Translate**, and **PyDictionary**, the system allows users to record or upload audio and receive real-time transcription and translation across multiple languages.
