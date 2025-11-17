@@ -25,6 +25,19 @@ The project aims to break down language barriers by providing fast, reliable, an
 
 ---
 
+## 📸 Screenshots
+
+> **Note:** The screenshots below contain *sample data* only.  
+> Actual data in the live system may differ.
+
+![Screenshot 1](screenshots/1.jpg)
+![Screenshot 2](screenshots/2.jpg)
+![Screenshot 3](screenshots/3.jpg)
+![Screenshot 4](screenshots/4.jpg)
+
+
+---
+
 ## 🛠 Technologies Used
 - **Frontend**: HTML, CSS, JavaScript  
 - **Backend**: Python (Flask), PHP  
