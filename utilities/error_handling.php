@@ -59,8 +59,7 @@ class ErrorHandling
 			//exit(json_encode($exit));
 		}
 
-		if (strlen((trim($_POST['text']))) > 5000) {
-
+		if (strlen((trim($_POST['text']))) >= 5000) {
 			// log 2,000
 			logs("error-tt-5", $dbcon);
 
@@ -141,14 +140,14 @@ class ErrorHandling
 
 			// (3) Note: Source Language would be compared on common_languages of API and Whisper
 			if ($_POST['src'] != "auto") {
-				if (!array_key_exists($_POST['src'], $api_lang) || !array_key_exists($_POST['target'], $common_lang)) {
+				if (!array_key_exists($_POST['src'], $common_lang) || !array_key_exists($_POST['target'], $api_lang)) {
 					logs("error-at-6", $dbcon);
 
 					$exit = ['removeBGM' => 'error', 'error' => 6];
 					exit(json_encode($exit));
 				}
 			} else {
-				if (!array_key_exists($_POST['target'], $common_lang)) {
+				if (!array_key_exists($_POST['target'], $api_lang)) {
 					logs("error-at-6", $dbcon);
 
 					$exit = ['removeBGM' => 'error', 'error' => 6];

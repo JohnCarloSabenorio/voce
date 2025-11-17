@@ -16,7 +16,6 @@ model = whisper.load_model("small")
 langs_dict = GoogleTranslator().get_supported_languages(as_dict=True) 
 app = Flask('lang_codes')
 
-
 # functions on extracting vocals, 
 #   for spleeter_env 
 #   for python 3.8
@@ -53,21 +52,29 @@ def get_meaning():
     meanings = dictionary.meaning(json_data["word"])
     return json.dumps(meanings)
 
+
+
 @app.route("/transcribe", methods=["POST"])
 def transcribe():
-    json_data = request.get_json()
-    print(json_data)
+    try:
+        json_data = request.get_json()
+        print(json_data)
 
-    filePath = "audio_files/" + json_data['fname'] + "/audio_processed.mp3"
-    #filePath = "audio_files/" + filename + ("." + extension if removeBGM == "off" else "/vocals.wav")
-    if json_data['src'] == "auto":
-        result = model.transcribe(filePath)
-    else:
-        result = model.transcribe(filePath, language=json_data['src'])
-        
-    output = {"text": result["text"], "language": result["language"]}
-    print(str(output))
-    return output
+        filePath = "audio_files/" + json_data['fname'] + "/audio_processed.mp3"
+        #filePath = "audio_files/" + filename + ("." + extension if removeBGM == "off" else "/vocals.wav")
+        if json_data['src'] == "auto":
+            result = model.transcribe(filePath)
+        else:
+            result = model.transcribe(filePath, language=json_data['src'])
+            
+        output = {"text": result["text"], "language": result["language"], "error": 0}
+        print(str(output))
+        return output
+    except Exception as e:
+        print(e)
+        return {"text": "", "language": "", "error": 1}
+
+
 
 @app.route("/getlangcodes", methods=["GET"])
 def getlangcodes():
@@ -80,18 +87,20 @@ def translate():
         json_data = request.get_json()
         print(json_data)
         trg = langs_dict[json_data['trg']]
-        if json_data['src'] == 'auto':
-            return GoogleTranslator(source= 'auto', target= trg).translate(json_data['txt'])
-        
-        src = langs_dict[json_data['src']]
-        translated = GoogleTranslator(source= src, target= trg).translate(json_data['txt'])
-        
+        print("SOURCE IS : " + json_data['src'])
+        if json_data['src'] == 'auto':            
+            print("Source language is auto...")
+            translated = GoogleTranslator(source= 'auto', target= trg).translate(json_data['txt'])
+        else:
+            src = langs_dict[json_data['src']]
+            translated = GoogleTranslator(source= src, target= trg).translate(json_data['txt'])
         if translated is None:
-            return "~<b>Voce Error</b>: Could not translate input~"
-        
-        translated = translated.replace("\\r\\n", " ")
-        return translated
-    except Exception as e:
+            return json_data['txt']
+        else:
+            translated = translated.replace("\\r\\n", " ")
+            return translated
+            
+    except ConnectionError as e:
         print(e)
         return "~<b>Voce Error</b>: Please connect to the Internet to continue translating~"
 
@@ -154,7 +163,7 @@ def testcon():
     return "connected"
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000, threaded = True)
+    app.run(debug=True, port=5000, threaded=False)
 
 
 

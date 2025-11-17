@@ -92,6 +92,9 @@ require ("utilities/recent_audio_translation.php");
                         case 7: // user added unprovided choices
                             echo "Recorded audio cannot be processed. Please contact Voce team.";
                             break;
+                        case 8: // when multiple requests cannot be handled by Whisper
+                            echo "Voce has been experiencing server issues. Please try again.";
+                            break;
                     }
                 }
                 ?>
@@ -113,7 +116,7 @@ require ("utilities/recent_audio_translation.php");
                             <select name="src" id="sourceLanguage" class="form-control">
                                 <!--  Will display Languages supported by API and Whisper -->
                                 <option value="auto">Auto-Detect Language...</option>Auto-Detect
-                                <?php foreach ($whisper_langs as $lang => $code): ?>
+                                <?php foreach ($common_langs as $lang => $code): ?>
                                     <option name="language">
                                         <?= $lang ?>
                                     </option>
@@ -135,7 +138,7 @@ require ("utilities/recent_audio_translation.php");
                         <select name="target" id="targetLanguage" class="form-control">
                             <!-- Will display languages supported by API only-->
                             <option value="">Select One …</option>
-                            <?php foreach ($common_langs as $lang => $code): ?>
+                            <?php foreach ($deep_langs as $lang => $code): ?>
                                 <option name="language">
                                     <?= $lang ?>
                                 </option>
@@ -242,14 +245,14 @@ require ("utilities/recent_audio_translation.php");
                 <span id="contact-return-message"></span>
                 <div class="input-form">
                     <input type="text" name="contact_name" class="form-control name-form fback-input" id="name"
-                        placeholder="Your Name">
+                        placeholder="Your Name" maxlength="255">
                 </div>
                 <div class="input-form">
                     <input type="text" class="form-control subject-form fback-input" name="contact_subject" id="subject"
-                        placeholder="Subject">
+                        placeholder="Subject" maxlength="255">
                 </div>
                 <div class="input-form">
-                    <textarea class="fback-msg" name="contact_message" rows="5" placeholder="Message"></textarea>
+                    <textarea class="fback-msg" name="contact_message" rows="5" placeholder="Message" maxlength="2000"></textarea>
                 </div>
                 <br />
                 <div class="submit-fback">
